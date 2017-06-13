@@ -43,6 +43,7 @@ bool MemoryManager::Attach(const std::wstring& strProcessName) {
 	while (Process32Next(hSnapshot, &ProcEntry)) {
 		if (!wcscmp(ProcEntry.szExeFile, (wchar_t *)strProcessName.c_str()))
 		{
+			m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcEntry.th32ProcessID);
 			m_dwProcessId = ProcEntry.th32ProcessID;
 			return true;
 		}
@@ -86,14 +87,6 @@ bool MemoryManager::GrabModule(const std::wstring& strModuleName)
 
 	CloseHandle(hSnapshot);
 	return false;
-}
-
-template <class T> bool MemoryManager::Read(DWORD dwAddr, T& Value) {
-	return ReadProcessMemory(m_hProcess, reinterpret_cast<LPVOID>(dwAddress), Value, sizeof(T), NULL) == TRUE;
-}
-
-template <class T> bool MemoryManager::Write(DWORD dwAddr, T& Value) {
-	return WriteProcessMemory(m_hProcess, reinterpret_cast<LPVOID>(dwAddress), Value, sizeof(T), NULL) == TRUE;
 }
 
 HANDLE MemoryManager::GetHandle() { return m_hProcess; }
