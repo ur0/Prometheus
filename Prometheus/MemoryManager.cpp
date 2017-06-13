@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
-
+#include "Utils.h"
 
 MemoryManager::MemoryManager()
 {
@@ -9,13 +9,13 @@ MemoryManager::MemoryManager()
 	m_Modules.clear();
 }
 
-MemoryManager::MemoryManager(const std::wstring& strProcessName = L"csgo.exe") {
+MemoryManager::MemoryManager(const std::wstring& strProcessName) {
 	m_hProcess = INVALID_HANDLE_VALUE;
 	m_dwProcessId = 0;
 	m_Modules.clear();
 
 	if (!Attach(strProcessName))
-		throw;
+		Utils::ErrorAndExit("You need to start the game, duh!");
 }
 
 bool MemoryManager::Attach(const std::wstring& strProcessName) {
@@ -64,8 +64,7 @@ bool MemoryManager::GrabModule(const std::wstring& strModuleName)
 		if (!wcscmp(ModEntry.szModule, strModuleName.c_str()))
 		{
 			CloseHandle(hSnapshot);
-			if(std::find(m_Modules.begin(), m_Modules.end(), ModEntry) == m_Modules.end())
-				m_Modules.push_back(ModEntry);
+			m_Modules.push_back(ModEntry);
 			return true;
 		}
 	}
@@ -80,8 +79,7 @@ bool MemoryManager::GrabModule(const std::wstring& strModuleName)
 		if (!wcscmp(ModEntry.szModule, strModuleName.c_str()))
 		{
 			CloseHandle(hSnapshot);
-			if (std::find(m_Modules.begin(), m_Modules.end(), ModEntry) == m_Modules.end())
-				m_Modules.push_back(ModEntry);
+			m_Modules.push_back(ModEntry);
 			return true;
 		}
 	}
