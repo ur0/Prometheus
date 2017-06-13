@@ -27,7 +27,7 @@ bool MemoryManager::Attach(const std::wstring& strProcessName) {
 
 	if (Process32First(hSnapshot, &ProcEntry)) {
 
-		if (!wcscmp(ProcEntry.szExeFile, (wchar_t *)strProcessName.c_str()))
+		if (!wcscmp(ProcEntry.szExeFile, strProcessName.c_str()))
 		{
 			CloseHandle(hSnapshot);
 			m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcEntry.th32ProcessID);
@@ -47,6 +47,45 @@ bool MemoryManager::Attach(const std::wstring& strProcessName) {
 			return true;
 		}
 	}
+	CloseHandle(hSnapshot);
+	return false;
+}
+
+bool MemoryManager::GrabModule(const std::wstring& strModuleName)
+{
+	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, m_dwProcessId);
+	if (hSnapshot == INVALID_HANDLE_VALUE) return false;
+
+	MODULEENTRY32 ModEntry;
+	ModEntry.dwSize = sizeof(MODULEENTRY32);
+
+	if (Module32First(hSnapshot, &ModEntry))
+	{
+		if (!wcscmp(ModEntry.szModule, strModuleName.c_str()))
+		{
+			CloseHandle(hSnapshot);
+			if(std::find(m_Modules.begin(), m_Modules.end(), ModEntry) == m_Modules.end())
+				m_Modules.push_back(ModEntry);
+			return true;
+		}
+	}
+	else
+	{
+		CloseHandle(hSnapshot);
+		return false;
+	}
+
+	while (Module32Next(hSnapshot, &ModEntry))
+	{
+		if (!wcscmp(ModEntry.szModule, strModuleName.c_str()))
+		{
+			CloseHandle(hSnapshot);
+			if (std::find(m_Modules.begin(), m_Modules.end(), ModEntry) == m_Modules.end())
+				m_Modules.push_back(ModEntry);
+			return true;
+		}
+	}
+
 	CloseHandle(hSnapshot);
 	return false;
 }
