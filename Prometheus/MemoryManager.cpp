@@ -30,7 +30,7 @@ bool MemoryManager::Attach(const std::wstring& strProcessName) {
 		if (!wcscmp(ProcEntry.szExeFile, strProcessName.c_str()))
 		{
 			CloseHandle(hSnapshot);
-			m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcEntry.th32ProcessID);
+			m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, ProcEntry.th32ProcessID);
 			m_dwProcessId = ProcEntry.th32ProcessID;
 			return true;
 		}
@@ -43,7 +43,7 @@ bool MemoryManager::Attach(const std::wstring& strProcessName) {
 	while (Process32Next(hSnapshot, &ProcEntry)) {
 		if (!wcscmp(ProcEntry.szExeFile, (wchar_t *)strProcessName.c_str()))
 		{
-			m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcEntry.th32ProcessID);
+			m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, ProcEntry.th32ProcessID);
 			m_dwProcessId = ProcEntry.th32ProcessID;
 			return true;
 		}
@@ -92,6 +92,28 @@ bool MemoryManager::GrabModule(const std::wstring& strModuleName)
 HANDLE MemoryManager::GetHandle() { return m_hProcess; }
 DWORD MemoryManager::GetProcId() { return m_dwProcessId; }
 std::vector<MODULEENTRY32> MemoryManager::GetModules() { return m_Modules; }
+
+size_t GetClientBaseAddr(MemoryManager *MemMgr) {
+	// Load client.dll
+	if (!MemMgr->GrabModule(L"client.dll")) {
+		Utils::ErrorAndExit("Couldn't find client.dll!");
+	}
+
+	// Find client.dll's base address
+	size_t pClientBase = 0;
+	for (auto m : MemMgr->GetModules())
+	{
+		if (!wcscmp(m.szModule, L"client.dll"))
+		{
+			pClientBase = reinterpret_cast<size_t>(m.modBaseAddr);
+			break;
+		}
+	}
+	if (!pClientBase)
+		Utils::ErrorAndExit("Couldn't find client.dll's base address");
+
+	return pClientBase;
+}
 
 MemoryManager::~MemoryManager()
 {

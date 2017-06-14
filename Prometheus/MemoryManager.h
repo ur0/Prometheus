@@ -16,7 +16,6 @@ public:
 	DWORD MemoryManager::GetProcId();
 	std::vector<MODULEENTRY32> MemoryManager::GetModules();
 
-
 	template <class T> inline void Read(DWORD dwAddr, T& Value) {
 		if (!ReadProcessMemory(m_hProcess, (LPVOID)dwAddr, reinterpret_cast<LPVOID>(&Value), sizeof(T), NULL))
 			Utils::ErrorAndExit("Couldn't read memory!");
@@ -32,3 +31,5 @@ private:
 	DWORD m_dwProcessId;
 	std::vector<MODULEENTRY32> m_Modules;
 };
+
+size_t GetClientBaseAddr(MemoryManager *);
