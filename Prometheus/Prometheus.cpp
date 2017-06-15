@@ -51,6 +51,8 @@ int main()
 			TerminateThread(hRadarThread, 0);
 			BHopControl = 0;
 			RadarHackControl = 0;
+			CloseHandle(hBHopThread);
+			CloseHandle(hRadarThread);
 			hBHopThread = CreateThread(NULL, NULL, BHopStart, &BHopControl, NULL, NULL);
 			hRadarThread = CreateThread(NULL, NULL, StartRadar, &RadarHackControl, NULL, NULL);
 			std::cout << "Restarted all threads..." << std::endl;
