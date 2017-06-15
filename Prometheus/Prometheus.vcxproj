@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AimBot.h" />
     <ClInclude Include="BunnyHop.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="Offsets.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AimBot.cpp" />
     <ClCompile Include="BunnyHop.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="Prometheus.cpp" />
