@@ -101,20 +101,6 @@ Vec3 AimBot::GetNewAngle(Vec3 v1, Vec3 v2) {
 	return fin;
 }
 
-// Get the distance to target
-float AimBot::GetAimDist(Vec3 eyePos, Vec3 playerHeadPos, Vec3 entityHeadPos) {
-	Vec3 newAngles = GetNewAngle(playerHeadPos, entityHeadPos);
-
-	float yaw = ((float)sin(fabsf(eyePos.y - newAngles.y) * M_PI / 180)) * VectorDistance(playerHeadPos, entityHeadPos);
-	float pitch = ((float)sin(fabsf(eyePos.x - newAngles.x) * M_PI / 180)) * VectorDistance(playerHeadPos, entityHeadPos);
-
-	return sqrt(yaw*yaw + pitch*pitch);
-}
-
-float AimBot::VectorDistance(Vec3 vector1, Vec3 vector2) {
-	return sqrt(pow((vector1.x - vector2.x), 2) + pow((vector1.y - vector2.y), 2) + pow((vector1.z - vector2.z), 2));
-}
-
 Vec3 AimBot::GetBonePos(DWORD dwEntity, int iTargetBone) {
 	Vec3 bonePos;
 	DWORD boneMtx;

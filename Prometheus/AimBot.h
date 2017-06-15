@@ -32,8 +32,6 @@ private:
 
 	Vec3 GetNewAngle(Vec3, Vec3);
 	Vec3 GetBonePos(DWORD, int);
-	float VectorDistance(Vec3, Vec3);
-	float GetAimDist(Vec3, Vec3, Vec3);
 	Vec3 VecSmooth(Vec3, Vec3, float);
 	Vec3 Normalize(Vec3);
 };
