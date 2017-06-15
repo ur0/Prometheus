@@ -62,7 +62,7 @@ int main()
 			TerminateThread(hRadarThread, 0);
 			exit(0);
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	}
 
 	return 0;
