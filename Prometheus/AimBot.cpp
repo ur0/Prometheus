@@ -26,6 +26,11 @@ void AimBot::Run() {
 	MemMgr->Read(GetEngineBaseAddr(MemMgr) + O_M_DW_CLIENT_STATE, dwEngineState);
 
 	while (true) {
+		if (!*Control) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			continue;
+		}
+
 		MemMgr->Read(ClientBaseAddr + O_M_VEC_ORIGIN, playerPos);
 		MemMgr->Read(dwLocalPlayer + O_M_ICROSSHAIR, iCrosshair);
 		MemMgr->Read(ClientBaseAddr + O_ENTITY_LIST + (iCrosshair - 1) * O_ENT_LOOP_DIST, dwTarget);
