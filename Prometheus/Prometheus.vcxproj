@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="AimBot.h" />
     <ClInclude Include="BunnyHop.h" />
+    <ClInclude Include="Glow.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="Offsets.h" />
     <ClInclude Include="Radar.h" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="AimBot.cpp" />
     <ClCompile Include="BunnyHop.cpp" />
+    <ClCompile Include="Glow.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="Prometheus.cpp" />
     <ClCompile Include="Radar.cpp" />

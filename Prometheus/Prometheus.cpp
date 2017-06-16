@@ -11,6 +11,7 @@
 
 #include "AimBot.h"
 #include "BunnyHop.h"
+#include "Glow.h"
 #include "Radar.h"
 
 void ShowUsage() {
@@ -36,6 +37,9 @@ int main()
 	int AimBotControl = 0;
 	HANDLE hAimBotThread = CreateThread(NULL, NULL, StartAimBot, &AimBotControl, NULL, NULL);
 
+	int GlowControl = 0;
+	HANDLE hGlowThread = CreateThread(NULL, NULL, GlowStart, &GlowControl, NULL, NULL);
+
 	while (true) {
 		if (GetAsyncKeyState(VK_F6)) {
 			if (BHopControl)
@@ -58,24 +62,37 @@ int main()
 				std::cout << "Enabling AimBot..." << std::endl;
 			AimBotControl = !AimBotControl;
 		}
+		else if (GetAsyncKeyState(VK_F9)) {
+			if (GlowControl)
+				std::cout << "Disabling Glow..." << std::endl;
+			else
+				std::cout << "Enabling Glow..." << std::endl;
+			GlowControl = !GlowControl;
+		}
 		else if (GetAsyncKeyState(VK_F11)) {
 			TerminateThread(hBHopThread, 0);
 			TerminateThread(hRadarThread, 0);
 			TerminateThread(hAimBotThread, 0);
+			TerminateThread(hGlowThread, 0);
 			BHopControl = 0;
 			RadarHackControl = 0;
 			AimBotControl = 0;
+			GlowControl = 0;
 			CloseHandle(hBHopThread);
 			CloseHandle(hRadarThread);
 			CloseHandle(hAimBotThread);
+			CloseHandle(hGlowThread);
 			hBHopThread = CreateThread(NULL, NULL, BHopStart, &BHopControl, NULL, NULL);
 			hRadarThread = CreateThread(NULL, NULL, StartRadar, &RadarHackControl, NULL, NULL);
 			hAimBotThread = CreateThread(NULL, NULL, StartAimBot, &AimBotControl, NULL, NULL);
+			hGlowThread = CreateThread(NULL, NULL, GlowStart, &GlowControl, NULL, NULL);
 			std::cout << "Restarted all threads..." << std::endl;
 		}
 		else if (GetAsyncKeyState(VK_F12)) {
 			TerminateThread(hBHopThread, 0);
 			TerminateThread(hRadarThread, 0);
+			TerminateThread(hAimBotThread, 0);
+			TerminateThread(hGlowThread, 0);
 			exit(0);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(250));

@@ -28,3 +28,7 @@
 #define O_M_DW_CLIENT_STATE 0x59F21C
 #define O_M_VIEW_OFFSET 0x104
 #define O_M_ICROSSHAIR 0xB2B4
+
+// Glow
+#define O_M_I_GLOW_IDX 0xA320
+#define O_GLOW_OBJ_MJR 0x4FA5508
