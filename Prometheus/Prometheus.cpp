@@ -52,7 +52,7 @@ int main()
 			RadarHackControl = !RadarHackControl;
 		}
 		else if (GetAsyncKeyState(VK_F8)) {
-			if (RadarHackControl)
+			if (AimBotControl)
 				std::cout << "Disabling AimBot..." << std::endl;
 			else
 				std::cout << "Enabling AimBot..." << std::endl;

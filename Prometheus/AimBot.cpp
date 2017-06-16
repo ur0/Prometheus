@@ -21,16 +21,15 @@ void AimBot::Run() {
 	int iLocalPlayerTeam, iTargetTeam, iTargetHealth, iCrosshair;
 	bool breakout = false;
 
-	MemMgr->Read(ClientBaseAddr + O_LOCAL_PLAYER, dwLocalPlayer);
-	MemMgr->Read(dwLocalPlayer + O_M_I_TEAM_NUM, iLocalPlayerTeam);
-	MemMgr->Read(GetEngineBaseAddr(MemMgr) + O_M_DW_CLIENT_STATE, dwEngineState);
-
 	while (true) {
 		if (!*Control) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 			continue;
 		}
 
+		MemMgr->Read(ClientBaseAddr + O_LOCAL_PLAYER, dwLocalPlayer);
+		MemMgr->Read(dwLocalPlayer + O_M_I_TEAM_NUM, iLocalPlayerTeam);
+		MemMgr->Read(GetEngineBaseAddr(MemMgr) + O_M_DW_CLIENT_STATE, dwEngineState);
 		MemMgr->Read(ClientBaseAddr + O_M_VEC_ORIGIN, playerPos);
 		MemMgr->Read(dwLocalPlayer + O_M_ICROSSHAIR, iCrosshair);
 		MemMgr->Read(ClientBaseAddr + O_ENTITY_LIST + (iCrosshair - 1) * O_ENT_LOOP_DIST, dwTarget);
