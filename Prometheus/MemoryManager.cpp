@@ -115,6 +115,28 @@ size_t GetClientBaseAddr(MemoryManager *MemMgr) {
 	return pClientBase;
 }
 
+size_t GetEngineBaseAddr(MemoryManager *MemMgr) {
+	// Load engine.dll
+	if (!MemMgr->GrabModule(L"engine.dll")) {
+		Utils::ErrorAndExit("Couldn't find client.dll!");
+	}
+
+	// Find client.dll's base address
+	size_t pClientBase = 0;
+	for (auto m : MemMgr->GetModules())
+	{
+		if (!wcscmp(m.szModule, L"engine.dll"))
+		{
+			pClientBase = reinterpret_cast<size_t>(m.modBaseAddr);
+			break;
+		}
+	}
+	if (!pClientBase)
+		Utils::ErrorAndExit("Couldn't find engine.dll's base address");
+
+	return pClientBase;
+}
+
 MemoryManager::~MemoryManager()
 {
 }
